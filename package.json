@@ -35,6 +35,13 @@
   },
   "name": "react-ring-menu",
   "author": "Enivia",
+  "description": "react ring menu",
+  "keywords": [
+    "ring menu",
+    "circle menu"
+  ],
+  "repository": "github:Enivia/react-ring-menu",
+  "homepage": "https://github.com/Enivia/react-ring-menu",
   "module": "dist/react-ring-menu.esm.js",
   "size-limit": [
     {
