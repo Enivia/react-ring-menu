@@ -1,27 +1,32 @@
-import { FC, memo, useMemo, useState } from 'react';
-import ArcHelper from './arc-helper';
-import type { MenuItem, RingMenuProps } from './interface';
+import { FC, memo, useMemo } from 'react';
+import SectorHelper from './SectorHelper';
+import { RingMenuProps } from './interface';
+import ItemsRenderer from './ItemsRenderer';
+import RingMenuContext from './RingMenuContext';
 import './index.less';
 
+const ROUND = 2 * Math.PI;
 
-const RingMenu: FC<RingMenuProps> = (props) => {
-  const { items, width, hollowRadius } = props;
-  const [arcHelper] = useState(() => new ArcHelper(width, hollowRadius));
+const RingMenu: FC<RingMenuProps> = props => {
+  const { items, width = 40, hollowRadius = 20 } = props;
 
-  const len = items.length;
-  const angle = useMemo(() => (2 * Math.PI) / len, [len]);
+  const contextValue = useMemo(() => ({ helper: new SectorHelper(width, hollowRadius) }), [
+    width,
+    hollowRadius,
+  ]);
 
-  const renderMenuItem = (item: MenuItem, index: number) => {
-    const path = arcHelper.getSectorPath(1, angle, index);
-    return (
-      <g key={item.key}>
-        <path d={path} fill="white" stroke="gray" strokeWidth={1} />
-      </g>
-    );
-  };
+  const size = useMemo(() => (width + hollowRadius) * 2, [width, hollowRadius]);
+  const viewBox = useMemo(() => {
+    const origin = -size / 2;
+    return `${origin} ${origin} ${size} ${size}`;
+  }, [size]);
 
   return (
-    <svg style={{ border: '1px solid' }}>{items.map((item, i) => renderMenuItem(item, i + 1))}</svg>
+    <RingMenuContext.Provider value={contextValue}>
+      <svg viewBox={viewBox} style={{ width: size, height: size, border: '1px solid' }}>
+        <ItemsRenderer items={items} level={1} origin={0} total={ROUND} />
+      </svg>
+    </RingMenuContext.Provider>
   );
 };
 export default memo(RingMenu);

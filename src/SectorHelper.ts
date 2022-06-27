@@ -1,39 +1,36 @@
-import type { Point } from "./interface";
+import { Point } from './interface';
 
-export default class ArcHelper {
-  origin: Point = { x: 80, y: 80 };
-
+export default class SectorHelper {
   width: number;
 
   hollowRadius: number;
 
-  constructor(width: number = 40, hollowRadius: number = 20) {
+  constructor(width: number, hollowRadius: number) {
     this.width = width;
     this.hollowRadius = hollowRadius;
   }
 
   getX = (r: number, angle: number) => {
-    return this.origin.x - r * Math.cos(angle);
+    return -r * Math.cos(angle);
   };
 
   getY = (r: number, angle: number) => {
-    return this.origin.y + r * Math.sin(angle);
+    return r * Math.sin(angle);
   };
 
-  getTerminalPoints = (r: number, angle: number, index: number): { start: Point; stop: Point } => {
-    const startAngle = angle * (index - 1);
-    const stopAngle = angle * index;
+  getPathPoints = (r: number, angle: number, startAngle: number): { start: Point; stop: Point } => {
+    const stopAngle = startAngle + angle;
     return {
       start: { x: this.getX(r, startAngle), y: this.getY(r, startAngle) },
       stop: { x: this.getX(r, stopAngle), y: this.getY(r, stopAngle) },
     };
   };
 
-  getSectorPath = (level: number, angle: number, index: number): string => {
+  getSectorPath = (level: number, angle: number, startAngle: number): string => {
     const innerRadius = this.hollowRadius + this.width * (level - 1);
-    const innerPoints = this.getTerminalPoints(innerRadius, angle, index);
+    const innerPoints = this.getPathPoints(innerRadius, angle, startAngle);
     const outerRaduis = this.hollowRadius + this.width * level;
-    const outerPoints = this.getTerminalPoints(outerRaduis, angle, index);
+    const outerPoints = this.getPathPoints(outerRaduis, angle, startAngle);
 
     return `M ${outerPoints.start.x} ${outerPoints.start.y} 
       A ${outerRaduis} ${outerRaduis}, 0 0 0, ${outerPoints.stop.x} ${outerPoints.stop.y} 
