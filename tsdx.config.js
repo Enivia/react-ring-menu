@@ -2,13 +2,12 @@ const postcss = require('rollup-plugin-postcss');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
-  rollup(config, options) {
+  rollup(config) {
     config.plugins.push(
       postcss({
         plugins: [autoprefixer()],
-        inject: true,
-        // only write out CSS for the first bundle (avoids pointless extra files):
-        extract: !!options.writeMeta,
+        extract: 'index.css',
+        minimize: true,
       })
     );
     return config;

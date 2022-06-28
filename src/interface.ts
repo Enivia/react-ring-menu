@@ -3,20 +3,24 @@ export interface Point {
   y: number;
 }
 
-export interface MenuItem {
+export interface BaseMenuItem {
   key: string | number;
   title: string;
   disabled?: boolean;
-  children?: MenuItem[];
+}
+
+export interface MenuItem extends BaseMenuItem {
+  children?: BaseMenuItem[];
 }
 
 export interface RingMenuProps {
   items: MenuItem[];
+  position: Point;
   width?: number;
   hollowRadius?: number;
 }
 
-export interface ItemsRendererProps {
+export interface MenuItemsProps {
   items: MenuItem[];
   level: number;
   /** origin angle */

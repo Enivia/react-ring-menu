@@ -3,10 +3,15 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import RingMenu from '../.';
 import { MenuItem } from '../dist/interface';
+import '../dist/index.css';
 
 const items: MenuItem[] = [
   { key: '1', title: 'item 1' },
-  { key: '2', title: 'item 2' },
+  {
+    key: '2',
+    title: 'item 2',
+    children: [{ key: '2-1', title: 'item 2-1' }],
+  },
   {
     key: '3',
     title: 'item 3',
@@ -19,8 +24,8 @@ const items: MenuItem[] = [
 
 const App = () => {
   return (
-    <div>
-      <RingMenu items={items} />
+    <div style={{ height: 600, border: '1px solid', position: 'relative' }}>
+      <RingMenu items={items} position={{ x: 200, y: 200 }} />
     </div>
   );
 };

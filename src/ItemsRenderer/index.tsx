@@ -1,19 +1,33 @@
-import { FC, memo, useMemo } from 'react';
-import { ItemsRendererProps } from '../interface';
+import { FC, memo } from 'react';
+import { MenuItemsProps } from '../interface';
 import Item from './Item';
 
-const ItemsRenderer: FC<ItemsRendererProps> = props => {
-  const { items, level, origin, total } = props;
+interface ItemsRendererProps extends MenuItemsProps {
+  onHover?(props: MenuItemsProps): void;
+}
 
-  const len = items.length;
-  const angle = useMemo(() => total / len, [total, len]);
+const ItemsRenderer: FC<ItemsRendererProps> = props => {
+  const { items, level, origin, total, onHover } = props;
+  const angle = total / items.length;
 
   return (
-    <>
-      {items.map((item, i) => (
-        <Item key={item.key} level={level} angle={angle} startAngle={origin + angle * i} />
-      ))}
-    </>
+    <g>
+      {items.map(({ key, children }, i) => {
+        const start = origin + angle * i;
+        return (
+          <Item
+            key={key}
+            level={level}
+            angle={angle}
+            origin={start}
+            onHover={() => {
+              if (!onHover) return;
+              onHover({ items: children || [], level: level + 1, origin: start, total: angle });
+            }}
+          />
+        );
+      })}
+    </g>
   );
 };
 export default memo(ItemsRenderer);
