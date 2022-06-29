@@ -1,7 +1,39 @@
+@prefix: ~'menu-item';
+
 .svg-container {
   position: absolute;
 }
 
-.sector {
+.@{prefix} {
   cursor: pointer;
+
+  &:hover {
+    &-sector {
+      fill: #307aee;
+    }
+    &-title {
+      fill: white;
+    }
+  }
+
+  &-sector {
+    fill: white;
+    stroke: #f1f3f8;
+    stroke-width: 1;
+  }
+  &-title {
+    font-size: 14px;
+    fill: #383c4d;
+  }
+
+  &&-disabled {
+    cursor: not-allowed;
+
+    .@{prefix}-sector {
+      fill: #fafafc;
+    }
+    .@{prefix}-title {
+      fill: #9da0ad;
+    }
+  }
 }

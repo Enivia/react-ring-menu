@@ -12,17 +12,23 @@ const ItemsRenderer: FC<ItemsRendererProps> = props => {
 
   return (
     <g>
-      {items.map(({ key, children }, i) => {
+      {items.map((item, i) => {
         const start = origin + angle * i;
         return (
           <Item
-            key={key}
+            key={item.key}
+            item={item}
             level={level}
             angle={angle}
             origin={start}
             onHover={() => {
               if (!onHover) return;
-              onHover({ items: children || [], level: level + 1, origin: start, total: angle });
+              onHover({
+                items: item.children || [],
+                level: level + 1,
+                origin: start,
+                total: angle,
+              });
             }}
           />
         );

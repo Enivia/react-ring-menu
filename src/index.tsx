@@ -8,7 +8,7 @@ import './index.less';
 const ROUND = 2 * Math.PI;
 
 const RingMenu: FC<RingMenuProps> = props => {
-  const { items, position, width = 40, hollowRadius = 20 } = props;
+  const { items, position, width = 50, hollowRadius = 20 } = props;
   const { x, y } = position;
   const [subItemsProps, setSubItemsProps] = useState<MenuItemsProps>();
 
