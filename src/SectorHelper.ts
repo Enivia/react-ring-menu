@@ -31,9 +31,9 @@ export default class SectorHelper {
   };
 
   getSectorPath = (level: number, angle: number, origin: number): string => {
-    const innerRadius = this.getRadius(level - 1);
+    const innerRadius = this.getRadius(level);
     const innerPoints = this.getSectorPoints(innerRadius, angle, origin);
-    const outerRaduis = this.getRadius(level);
+    const outerRaduis = this.getRadius(level + 1);
     const outerPoints = this.getSectorPoints(outerRaduis, angle, origin);
 
     return `M ${outerPoints.start.x} ${outerPoints.start.y} 
@@ -44,9 +44,9 @@ export default class SectorHelper {
 
   getSectorCenter = (level: number, angle: number, origin: number): Point => {
     const deg = origin + angle / 2;
-    const innerRadius = this.getRadius(level - 1);
+    const innerRadius = this.getRadius(level);
     const innerCenter = this.getCirclePoint(innerRadius, deg);
-    const outerRaduis = this.getRadius(level);
+    const outerRaduis = this.getRadius(level + 1);
     const outerCenter = this.getCirclePoint(outerRaduis, deg);
     return { x: (innerCenter.x + outerCenter.x) / 2, y: (innerCenter.y + outerCenter.y) / 2 };
   };

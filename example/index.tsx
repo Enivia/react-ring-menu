@@ -6,7 +6,12 @@ import { MenuItem } from '../dist/interface';
 import '../dist/index.css';
 
 const items: MenuItem[] = [
-  { key: '1', title: '1', disabled: true },
+  {
+    key: '1',
+    title: '1',
+    disabled: true,
+    children: [{ key: '1-1', title: '1-1' }],
+  },
   {
     key: '2',
     title: '2',
@@ -17,7 +22,11 @@ const items: MenuItem[] = [
     title: '3',
     children: [
       { key: '3-1', title: '3-1' },
-      { key: '3-2', title: '3-2' },
+      {
+        key: '3-2',
+        title: '3-2',
+        children: [{ key: '3-1-1', title: '3-1-1' }],
+      },
     ],
   },
 ];

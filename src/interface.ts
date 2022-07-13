@@ -3,14 +3,11 @@ export interface Point {
   y: number;
 }
 
-export interface BaseMenuItem {
+export interface MenuItem {
   key: string | number;
   title: string;
   disabled?: boolean;
-}
-
-export interface MenuItem extends BaseMenuItem {
-  children?: BaseMenuItem[];
+  children?: MenuItem[];
 }
 
 export interface RingMenuProps {
@@ -20,11 +17,13 @@ export interface RingMenuProps {
   hollowRadius?: number;
 }
 
-export interface MenuItemsProps {
-  items: MenuItem[];
-  level: number;
+export interface ItemsRenderProps {
   /** origin angle */
   origin: number;
   /** total angle */
   total: number;
+}
+
+export interface ActiveMenuItem extends ItemsRenderProps {
+  item: MenuItem;
 }

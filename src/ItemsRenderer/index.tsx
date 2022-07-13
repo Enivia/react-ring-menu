@@ -1,9 +1,11 @@
 import { FC, memo } from 'react';
-import { MenuItemsProps } from '../interface';
+import { ActiveMenuItem, ItemsRenderProps, MenuItem } from '../interface';
 import Item from './Item';
 
-interface ItemsRendererProps extends MenuItemsProps {
-  onHover?(props: MenuItemsProps): void;
+interface ItemsRendererProps extends ItemsRenderProps {
+  items: MenuItem[];
+  level: number;
+  onHover?(activeItem: ActiveMenuItem): void;
 }
 
 const ItemsRenderer: FC<ItemsRendererProps> = props => {
@@ -23,12 +25,7 @@ const ItemsRenderer: FC<ItemsRendererProps> = props => {
             origin={start}
             onHover={() => {
               if (!onHover) return;
-              onHover({
-                items: item.children || [],
-                level: level + 1,
-                origin: start,
-                total: angle,
-              });
+              onHover({ item, origin: start, total: angle });
             }}
           />
         );

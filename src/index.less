@@ -7,15 +7,6 @@
 .@{prefix} {
   cursor: pointer;
 
-  &:hover {
-    &-sector {
-      fill: #307aee;
-    }
-    &-title {
-      fill: white;
-    }
-  }
-
   &-sector {
     fill: white;
     stroke: #f1f3f8;
@@ -24,6 +15,15 @@
   &-title {
     font-size: 14px;
     fill: #383c4d;
+  }
+
+  &&-hover:not(&-disabled) {
+    .@{prefix}-sector {
+      fill: #307aee;
+    }
+    .@{prefix}-title {
+      fill: white;
+    }
   }
 
   &&-disabled {
