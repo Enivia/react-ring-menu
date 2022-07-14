@@ -15,7 +15,13 @@ const items: MenuItem[] = [
   {
     key: '2',
     title: '2',
-    children: [{ key: '2-1', title: '2-1' }],
+    children: [
+      {
+        key: '2-1',
+        title: '2-1',
+        children: [{ key: '2-1-1', title: '2-1-1' }],
+      },
+    ],
   },
   {
     key: '3',

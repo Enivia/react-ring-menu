@@ -1,8 +1,7 @@
-import { FC, memo, useMemo, useState } from 'react';
+import { FC, memo, useMemo, useRef, useState } from 'react';
 import SectorHelper from './SectorHelper';
-import { ActiveMenuItem, RingMenuProps } from './interface';
-import ItemsRenderer from './ItemsRenderer';
-import RingMenuContext from './RingMenuContext';
+import { ActiveMenuItem, MenuItem, RingMenuProps } from './interface';
+import ItemRenderer from './ItemRenderer';
 import './index.less';
 
 const ROUND = 2 * Math.PI;
@@ -10,13 +9,9 @@ const ROUND = 2 * Math.PI;
 const RingMenu: FC<RingMenuProps> = props => {
   const { items, position, width = 50, hollowRadius = 20 } = props;
   const { x, y } = position;
-  const [activeItems, setActiveItems] = useState<ActiveMenuItem[]>(() => [
-    { item: { key: 'ROOT', title: 'ROOT', children: items }, origin: 0, total: ROUND },
-  ]);
 
-  const contextValue = useMemo(() => {
-    return { helper: new SectorHelper(width, hollowRadius), activeItems };
-  }, [width, hollowRadius, activeItems]);
+  const [activeItems, setActiveItems] = useState<ActiveMenuItem[]>([]);
+  const helper = useRef(new SectorHelper(width, hollowRadius));
 
   const size = useMemo(() => {
     return (width + hollowRadius) * 2 + width * 2 * activeItems.length;
@@ -24,35 +19,46 @@ const RingMenu: FC<RingMenuProps> = props => {
   const basePoint = -size / 2;
   const viewBox = `${basePoint} ${basePoint} ${size} ${size}`;
 
-  const onMenuHover = (activeItem: ActiveMenuItem, level: number) => {
-    const items = activeItems.splice(0, level + 1);
-    items.push(activeItem);
+  const onMenuItemHover = (item: MenuItem, level: number, origin: number, total: number) => {
+    const items = activeItems.splice(0, level);
+    if (!item.disabled) {
+      items.push({ item, origin, total });
+    }
     setActiveItems(items);
   };
 
+  const renderItems = (items: MenuItem[], level: number, origin: number, total: number) => {
+    const angle = total / items.length;
+    return items.map((item, i) => {
+      const start = origin + angle * i;
+      const active = activeItems.some(menu => menu.item.key === item.key);
+      const config = helper.current.getSectorRenderConfig(level, angle, start);
+      return (
+        <ItemRenderer
+          key={item.key}
+          item={item}
+          config={config}
+          active={active}
+          onHover={() => onMenuItemHover(item, level, start, angle)}
+        />
+      );
+    });
+  };
+
   return (
-    <RingMenuContext.Provider value={contextValue}>
-      <svg
-        className="svg-container"
-        viewBox={viewBox}
-        style={{ width: size, height: size, left: basePoint + x, top: basePoint + y }}
-      >
-        <g onMouseLeave={() => setActiveItems(activeItems.splice(0, 1))}>
-          {activeItems.map(({ item, origin, total }, level) => {
-            if (item.disabled || !item.children) return null;
-            return (
-              <ItemsRenderer
-                items={item.children}
-                origin={origin}
-                total={total}
-                level={level}
-                onHover={menu => onMenuHover(menu, level)}
-              />
-            );
-          })}
-        </g>
-      </svg>
-    </RingMenuContext.Provider>
+    <svg
+      className="svg-container"
+      viewBox={viewBox}
+      style={{ width: size, height: size, left: basePoint + x, top: basePoint + y }}
+    >
+      <g onMouseLeave={() => setActiveItems([])}>
+        {renderItems(items, 0, 0, ROUND)}
+        {activeItems.map(({ item, origin, total }, i) => {
+          if (!item.children?.length) return null;
+          return <g key={i}>{renderItems(item.children, i + 1, origin, total)}</g>;
+        })}
+      </g>
+    </svg>
   );
 };
 export default memo(RingMenu);

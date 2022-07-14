@@ -17,13 +17,17 @@ export interface RingMenuProps {
   hollowRadius?: number;
 }
 
-export interface ItemsRenderProps {
+export interface ActiveMenuItem {
+  item: MenuItem;
   /** origin angle */
   origin: number;
   /** total angle */
   total: number;
 }
 
-export interface ActiveMenuItem extends ItemsRenderProps {
-  item: MenuItem;
+export interface SectorRenderConfig {
+  innerRadius: number;
+  outerRadius: number;
+  points: [Point, Point, Point, Point];
+  center: Point;
 }

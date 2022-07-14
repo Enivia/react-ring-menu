@@ -1,4 +1,4 @@
-import { Point } from './interface';
+import { Point, SectorRenderConfig } from './interface';
 
 export default class SectorHelper {
   width: number;
@@ -26,28 +26,24 @@ export default class SectorHelper {
     return { x: this.getX(r, angle), y: this.getY(r, angle) };
   };
 
-  getSectorPoints = (r: number, angle: number, origin: number): { start: Point; stop: Point } => {
-    return { start: this.getCirclePoint(r, origin), stop: this.getCirclePoint(r, origin + angle) };
-  };
-
-  getSectorPath = (level: number, angle: number, origin: number): string => {
+  getSectorRenderConfig = (level: number, angle: number, origin: number): SectorRenderConfig => {
     const innerRadius = this.getRadius(level);
-    const innerPoints = this.getSectorPoints(innerRadius, angle, origin);
-    const outerRaduis = this.getRadius(level + 1);
-    const outerPoints = this.getSectorPoints(outerRaduis, angle, origin);
+    const outerRadius = this.getRadius(level + 1);
 
-    return `M ${outerPoints.start.x} ${outerPoints.start.y} 
-      A ${outerRaduis} ${outerRaduis}, 0 0 0, ${outerPoints.stop.x} ${outerPoints.stop.y} 
-      L ${innerPoints.stop.x} ${innerPoints.stop.y} 
-      A ${innerRadius} ${innerRadius}, 0 0 1, ${innerPoints.start.x} ${innerPoints.start.y} Z`;
-  };
+    const points: [Point, Point, Point, Point] = [
+      this.getCirclePoint(outerRadius, origin),
+      this.getCirclePoint(outerRadius, origin + angle),
+      this.getCirclePoint(innerRadius, origin + angle),
+      this.getCirclePoint(innerRadius, origin),
+    ];
 
-  getSectorCenter = (level: number, angle: number, origin: number): Point => {
-    const deg = origin + angle / 2;
-    const innerRadius = this.getRadius(level);
-    const innerCenter = this.getCirclePoint(innerRadius, deg);
-    const outerRaduis = this.getRadius(level + 1);
-    const outerCenter = this.getCirclePoint(outerRaduis, deg);
-    return { x: (innerCenter.x + outerCenter.x) / 2, y: (innerCenter.y + outerCenter.y) / 2 };
+    const centerDeg = origin + angle / 2;
+    const innerCenter = this.getCirclePoint(innerRadius, centerDeg);
+    const outerCenter = this.getCirclePoint(outerRadius, centerDeg);
+    const center: Point = {
+      x: (innerCenter.x + outerCenter.x) / 2,
+      y: (innerCenter.y + outerCenter.y) / 2,
+    };
+    return { innerRadius, outerRadius, points, center };
   };
 }
