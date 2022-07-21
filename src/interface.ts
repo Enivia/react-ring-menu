@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react';
+
 export interface Point {
   x: number;
   y: number;
@@ -12,9 +14,10 @@ export interface MenuItem {
 
 export interface RingMenuProps {
   items: MenuItem[];
-  position: Point;
+  position?: Point;
   width?: number;
   hollowRadius?: number;
+  onClick?(item: MenuItem, e: MouseEvent<SVGElement>): void;
 }
 
 export interface ActiveMenuItem {

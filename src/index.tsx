@@ -7,8 +7,9 @@ import './index.less';
 const ROUND = 2 * Math.PI;
 
 const RingMenu: FC<RingMenuProps> = props => {
-  const { items, position, width = 50, hollowRadius = 20 } = props;
-  const { x, y } = position;
+  const { items, position, width = 50, hollowRadius = 20, onClick } = props;
+  const x = position?.x ?? 0;
+  const y = position?.y ?? 0;
 
   const [activeItems, setActiveItems] = useState<ActiveMenuItem[]>([]);
   const helper = useRef(new SectorHelper(width, hollowRadius));
@@ -40,6 +41,7 @@ const RingMenu: FC<RingMenuProps> = props => {
           config={config}
           active={active}
           onHover={() => onMenuItemHover(item, level, start, angle)}
+          onClick={e => onClick?.(item, e)}
         />
       );
     });

@@ -9,10 +9,11 @@ interface ItemProps {
   config: SectorRenderConfig;
   active?: boolean;
   onHover(e: MouseEvent<SVGElement>): void;
+  onClick(e: MouseEvent<SVGElement>): void;
 }
 
 const ItemRenderer: FC<ItemProps> = props => {
-  const { item, config, active, onHover } = props;
+  const { item, config, active, onHover, onClick } = props;
   const { innerRadius, outerRadius, points, center } = config;
 
   const path = `M ${points[0].x} ${points[0].y} 
@@ -27,6 +28,7 @@ const ItemRenderer: FC<ItemProps> = props => {
         [`${className}-disabled`]: item.disabled,
       })}
       onMouseEnter={onHover}
+      onClick={onClick}
     >
       <path className={`${className}-sector`} d={path} />
       <text

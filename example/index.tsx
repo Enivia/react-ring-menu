@@ -42,7 +42,7 @@ const App = () => {
     <div
       style={{ height: 600, border: '1px solid', position: 'relative', backgroundColor: '#f1f2f3' }}
     >
-      <RingMenu items={items} position={{ x: 200, y: 200 }} />
+      <RingMenu items={items} position={{ x: 200, y: 200 }} onClick={item => console.log(item)} />
     </div>
   );
 };
