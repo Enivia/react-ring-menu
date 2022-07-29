@@ -10,11 +10,10 @@ const items: MenuItem[] = [
     key: '1',
     title: '1',
     disabled: true,
-    children: [{ key: '1-1', title: '1-1' }],
   },
   {
     key: '2',
-    title: '2',
+    title: 'wrap\ntitle\nmenu',
     children: [
       {
         key: '2-1',
@@ -40,7 +39,7 @@ const items: MenuItem[] = [
 const App = () => {
   return (
     <div
-      style={{ height: 600, border: '1px solid', position: 'relative', backgroundColor: '#f1f2f3' }}
+      style={{ height: 600, border: '1px solid', position: 'relative', backgroundColor: '#ddd' }}
     >
       <RingMenu items={items} position={{ x: 200, y: 200 }} onClick={item => console.log(item)} />
     </div>

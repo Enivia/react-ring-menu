@@ -21,6 +21,25 @@ const ItemRenderer: FC<ItemProps> = props => {
   L ${points[2].x} ${points[2].y} 
   A ${innerRadius} ${innerRadius}, 0 0 1, ${points[3].x} ${points[3].y} Z`;
 
+  const rows = item.title.split('\n');
+  const renderTitleContent = () => {
+    if (rows.length <= 1) {
+      return item.title;
+    }
+    const startY = center.y - (rows.length * 16) / 2 + 7;
+    return rows.map((text, i) => (
+      <tspan
+        key={i}
+        x={center.x}
+        y={startY + i * 16}
+        textAnchor="middle"
+        alignmentBaseline="middle"
+      >
+        {text}
+      </tspan>
+    ));
+  };
+
   return (
     <g
       className={cls(className, {
@@ -38,8 +57,8 @@ const ItemRenderer: FC<ItemProps> = props => {
         textAnchor="middle"
         alignmentBaseline="middle"
       >
-        {item.title}
-        <title>{item.title}</title>
+        {renderTitleContent()}
+        <title>{rows.join('')}</title>
       </text>
     </g>
   );
